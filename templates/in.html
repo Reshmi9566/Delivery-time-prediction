@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Time Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .form-column {
+            width: 48%;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .button {
+            padding: 10px 20px;
+            background: #007bff; /* Blue color */
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 8px; /* Curved corners */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Slight shadow for 3D effect */
+            transition: background 0.3s, transform 0.2s; 
+        }
+        .button:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup button {
+            padding: 5px 10px;
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .popup button:hover {
+            background: #c82333;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Delivery Time Prediction</h1>
+        <p>Optimize your delivery logistics with accurate time predictions</p>
+    </header>
+    <div class="container">
+        <h2>Enter Delivery Details</h2>
+        <form action="/predict" method="post">
+            <div class="form-container">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="age">Delivery Person Age</label>
+                        <input type="number" id="age" name="age" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ratings">Delivery Person Ratings</label>
+                        <input type="number" id="ratings" name="ratings" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weather">Weather Conditions</label>
+                        <select id="weather" name="weather">
+                            <option value="Fog">Fog</option>
+                            <option value="Stormy">Stormy</option>
+                            <option value="Cloudy">Cloudy</option>
+                            <option value="Sandstorm">Sandstorm</option>
+                            <option value="Windy">Windy</option>
+                            <option value="Sunny">Sunny</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="traffic">Road Traffic Density</label>
+                        <select id="traffic" name="traffic">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                            <option value="Jam">Jam</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicle">Vehicle Condition</label>
+                        <input type="number" id="vehicle" name="vehicle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="order_type">Type of Order</label>
+                        <select id="order_type" name="order_type">                          
+                            <option value="Snack">Snack</option>
+                            <option value="Meal">Meal</option>
+                            <option value="Drinks">Drinks</option>
+                            <option value="Buffet">Buffet</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicle_type">Type of Vehicle</label>
+                        <select id="vehicle_type" name="vehicle_type">
+                            <option value="motorcyle">Motorcyle</option>
+                            <option value="scooter">Scooter</option>
+                            <option value="electric_scooter">Electric scooter</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="multiple_deliveries">Multiple Deliveries</label>
+                        <input type="number" id="multiple_deliveries" name="multiple_deliveries" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="festival">Festival</label>
+                        <select id="festival" name="festival">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <select id="city" name="city">
+                            <option value="metropolitian">Metropolitian</option>
+                            <option value="urban">Urban</option>
+                            <option value="semi-urban">Semi-urban</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prep_time">Order Preparation Time (minutes)</label>
+                        <input type="number" id="prep_time" name="prep_time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="distance">Distance (km)</label>
+                        <input type="text" id="distance" name="distance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="order_date">Order Date</label>
+                        <input type="date" id="order_date" name="order_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="order_time">Order Time (24-hour format)</label>
+                        <input type="time" id="order_time" name="order_time" required>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button id="predictButton" class="button">Predict Delivery Time</button>
+            </div>
+        </form>
+        <div id="overlay" class="overlay"></div>
+        <div id="popup" class="popup">
+            <h2>Predicted Delivery Time</h2>
+            <p id="predictionResult">{{prediction_result}}</p>
+            <button id="closePopup">Close</button>
+        </div>
+    </div>
+</body>
+</html>
